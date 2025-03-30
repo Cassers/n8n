@@ -1,7 +1,0 @@
-[build]
-builder = "DOCKERFILE"
-dockerfilePath = "CustomDockerfile"
-
-[deploy]
-startCommand = "npm start"
-restartPolicyType = "ON_FAILURE"
