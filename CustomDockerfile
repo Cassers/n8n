@@ -5,9 +5,6 @@ WORKDIR /app
 RUN corepack enable && corepack prepare pnpm@latest --activate
 ENV PNPM_HOME=/usr/local/bin
 
-# Crear usuario node si no existe
-RUN adduser -D -u 1000 node
-
 # Configurar el entorno
 ENV PORT=5678
 ENV N8N_PORT=$PORT
