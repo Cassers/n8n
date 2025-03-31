@@ -28,9 +28,8 @@ RUN pnpm install --frozen-lockfile && pnpm run build
 RUN mkdir -p /home/node/.n8n && chown -R node:node /home/node/.n8n
 
 USER node
-COPY docker-entrypoint.sh /docker-entrypoint.sh
-RUN chmod +x /docker-entrypoint.sh
+WORKDIR /home/node/.n8n
 
 EXPOSE $PORT
 
-ENTRYPOINT ["/docker-entrypoint.sh"]
+CMD ["pnpm", "run", "start"]
