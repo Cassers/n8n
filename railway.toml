@@ -5,3 +5,6 @@ dockerfilePath = "CustomDockerfile"
 [deploy]
 startCommand = "npm start"
 restartPolicyType = "ON_FAILURE"
+
+[volumes.data]
+path = "/home/node/.n8n"
