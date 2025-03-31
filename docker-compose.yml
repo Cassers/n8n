@@ -1,6 +1,8 @@
 services:
   n8n:
-    image: docker.n8n.io/n8nio/n8n
+    build:
+      context: .
+      dockerfile: CustomDockerfile
     ports:
       - "5678:5678"
     environment:
@@ -9,6 +11,17 @@ services:
       - DB_POSTGRESDB_DATABASE=n8n
       - DB_POSTGRESDB_USER=postgres
       - DB_POSTGRESDB_PASSWORD=password
+      - N8N_HOST=localhost
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+      - NODE_ENV=production
+      - N8N_PATH=/
+      - WEBHOOK_URL=http://localhost:5678/
+      - GENERIC_TIMEZONE=America/Bogota
+      - N8N_LOG_LEVEL=debug
+      - DEBUG=true
+      - N8N_DIAGNOSTICS_ENABLED=true
+      - N8N_METRICS=true
     depends_on:
       - postgres
     restart: always
