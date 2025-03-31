@@ -1,4 +1,3 @@
-# Image size ~ 400MB
 FROM node:21-alpine3.18
 
 WORKDIR /app
@@ -6,8 +5,8 @@ WORKDIR /app
 RUN corepack enable && corepack prepare pnpm@latest --activate
 ENV PNPM_HOME=/usr/local/bin
 
-# Instalar n8n globalmente
-RUN npm install -g n8n
+# Crear usuario node si no existe
+RUN adduser -D -u 1000 node
 
 # Configurar el entorno
 ENV PORT=5678
@@ -20,13 +19,18 @@ ENV N8N_PROTOCOL=http
 ENV N8N_LOG_LEVEL=debug
 ENV DEBUG=*
 
-# Configurar permisos y usuario
-RUN pnpm install --frozen-lockfile; pnpm run build
+# Copiar archivos y configurar permisos
+COPY . .
+RUN chown -R node:node /app
+RUN pnpm install --frozen-lockfile && pnpm run build
 
-USER nodejs
-WORKDIR /home/node/.n8n
+# Crear y configurar directorio de datos
+RUN mkdir -p /home/node/.n8n && chown -R node:node /home/node/.n8n
+
+USER node
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
 
 EXPOSE $PORT
 
-# Usar el binario n8n instalado globalmente
-CMD ["pnpm", "run", "start"]
+ENTRYPOINT ["/docker-entrypoint.sh"]
